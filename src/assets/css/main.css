@@ -1,0 +1,16 @@
+@import '../fonts/WorkSans/work-sans-font.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-green: #41b883;
+  --color-black: #35495e;
+  --color-white: #ffffff;
+  --color-red: #d63200;
+}
+
+* {
+  font-family: 'Work Sans';
+}
