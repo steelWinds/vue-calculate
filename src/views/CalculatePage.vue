@@ -6,7 +6,7 @@
 
         <MaterialInput
             v-model:value-model.trim="expression" 
-            :exclude-pattern="/[^0-9|{\=,\+,\-,\*,\(,\),\/, \^}]/g"
+            :exclude-pattern="/[^0-9|{\=,\+,\-,\*,\(,\),\/, \^. \., \,}]/g"
             class="twl-self-center" 
             type="text"
             autofocus />
@@ -89,11 +89,15 @@ export default {
 
             try {
                 result = eval(exp);
+
+                if ( !(Number.isInteger(result)) ) {
+                    result = result.toFixed(2);
+                }
             } catch(error) {
                 throw new EvalError('Expression is not valid!');
             }
 
-            return String(result);
+            return result;
         };
 
         return {
