@@ -1,4 +1,5 @@
 @import '../fonts/WorkSans/work-sans-font.css';
+@import './vueAnimations.css';
 
 @tailwind base;
 @tailwind components;
