@@ -14,7 +14,7 @@ export default {
         excludePattern: {
             type: RegExp, 
             required: false,
-            default: /[]/
+            default: /[^*]/
         },
 
         valueModel: {
