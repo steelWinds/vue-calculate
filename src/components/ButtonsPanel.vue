@@ -75,10 +75,10 @@ export default {
 
     &__operations-list {
         display: grid;
-        grid-template: repeat(2, 1fr) / repeat(4, 1fr);
+        grid-template: repeat(3, 1fr) / repeat(3, 1fr);
 
         @media (--tablet-w) {
-            grid-template-rows: repeat(2, 10vmin);
+            grid-template-rows: repeat(3, 10vmin);
         }
     }
 }
