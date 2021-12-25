@@ -8,7 +8,8 @@ let createCalculator = () => {
     });
     const optionsList = ref([
         '*', '/', '+',
-        '-', '^','**', '.'
+        '-', '**', '.', 
+        ')', '('
     ]);
     const numbersList = ref([
         7, 8, 9,

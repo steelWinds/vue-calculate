@@ -17,7 +17,8 @@
                 v-model:value-model.trim="expression" 
                 :exclude-pattern="excludePattern" 
                 type="text"
-                autofocus />
+                autofocus
+                inputmode="none" />
         </section>
 
         <ButtonsPanel>
@@ -33,6 +34,13 @@
             </template>
 
             <template #options-list>
+                <button 
+                    class="btns-panel__btn"
+                    @click="getResult(expression)">
+                    
+                    =
+                </button>
+
                 <button
                     v-for="optionItem of optionsList"
                     :key="optionItem"
@@ -51,13 +59,6 @@
                     @click="clearValue">
                     
                     C
-                </button>
-
-                <button 
-                    class="btns-panel__btn"
-                    @click="getResult(expression)">
-                    
-                    =
                 </button>
             </template>
         </ButtonsPanel>
@@ -163,7 +164,7 @@ export default {
     gap: 1em;
 
     @media (--tablets-w) {
-        padding-bottom: 3.5em;
+        padding-bottom: 12vmin;
     }
 
     &__title {
