@@ -1,15 +1,24 @@
 <template>
     <article class="calculate-page">
         <h1 class="calculate-page__title">
-            Vue-Calculator
+            Vue.js-Calculator
         </h1>
 
-        <MaterialInput
-            v-model:value-model.trim="expression" 
-            :exclude-pattern="/[^0-9|{\=,\+,\-,\*,\(,\),\/, \^. \., \,}]/g"
-            class="twl-self-center" 
-            type="text"
-            autofocus />
+        <section class="twl-flex twl-flex-col twl-items-center twl-relative">
+            <Message
+                :visible-condition="expressionError.error"
+                :y-pos="-100"
+                class="twl-bg-red twl-text-white twl-shadow-custom-red">
+
+                {{ expressionError.message }}
+            </Message>
+
+            <MaterialInput
+                v-model:value-model.trim="expression" 
+                :exclude-pattern="excludePattern" 
+                type="text"
+                autofocus />
+        </section>
 
         <ButtonsPanel>
             <template #numbers-list>
@@ -34,15 +43,19 @@
                 </button>
 
                 <button 
-                    class="btns-panel__btn twl-bg-red twl-text-white"
-                    @click="clearExpression">
+                    class="
+                        btns-panel__btn 
+                        twl-bg-red 
+                        twl-text-white 
+                        active:twl-shadow-custom-red"
+                    @click="clearValue">
                     
                     C
                 </button>
 
                 <button 
                     class="btns-panel__btn"
-                    @click="expression = getExpressionResult(expression)">
+                    @click="getResult(expression)">
                     
                     =
                 </button>
@@ -52,52 +65,72 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import createCalculator from '../composables/createCalculator.js';
+import switcher from '../composables/useSwitcher.js';
+import debounce from '../composables/debounce.js';
 
 import ButtonsPanel from '../components/ButtonsPanel.vue';
 import MaterialInput from '../components/MaterialInput.vue';
+import Message from '../components/Message.vue';
 
 export default {
     components: {   
         ButtonsPanel,
-        MaterialInput
+        MaterialInput,
+        Message
     },
 
     setup() {
-        const expression = ref('');
-        const optionsList = ref([
-            '*', '/', '+',
-            '-', '^','**'
-        ]);
-        const numbersList = ref([
-            7, 8, 9,
-            4, 5, 6,
-            1, 2, 3, 
-            0
-        ]);
+        const {
+            expression,
+            optionsList,
+            numbersList, 
+            setToExpression,
+            clearExpression,
+            getExpressionResult,
+            expressionError
+        } = createCalculator();
+        const debounceSwitcher = debounce(switcher, 1500);
+        const excludePattern = new RegExp(
+            /[^0-9|{\u002b, \u002d, \u002a, \u0028, \u0029, \u002f, \u005e, \u002e, \u002c}]/gi
+        );
 
-        let setToExpression = (value) => {
-            expression.value += value;
-        };
+        let clearValue = () => {
+            if ( !(expression.value.length) ) {
+                expressionError.error = true;
+                expressionError.message = 'Expression empty!';
 
-        let clearExpression = () => {
-            expression.value = '';
-        };
-
-        let getExpressionResult = (exp) => {
-            let result = 0;
-
-            try {
-                result = eval(exp);
-
-                if ( !(Number.isInteger(result)) ) {
-                    result = result.toFixed(2);
-                }
-            } catch(error) {
-                throw new EvalError('Expression is not valid!');
+                return debounceSwitcher(
+                    expressionError,
+                    'error',
+                    1500,
+                    false
+                );
             }
 
-            return result;
+            clearExpression();
+        };
+
+        let getResult = (value) => {
+            clearExpression();
+
+            let result = null;
+            
+            try {
+                result = getExpressionResult(value);
+            } catch(error) {
+                expressionError.error = true;
+                expressionError.message = error.message;
+
+                return debounceSwitcher(
+                    expressionError,
+                    'error',
+                    1500,
+                    false
+                );
+            }
+
+            setToExpression(result);
         };
 
         return {
@@ -105,8 +138,10 @@ export default {
             optionsList,
             numbersList, 
             setToExpression,
-            clearExpression,
-            getExpressionResult
+            clearValue,
+            getResult,
+            expressionError,
+            excludePattern
         };
     }
 };
@@ -136,8 +171,9 @@ export default {
             twl-text-green
             twl-mt-10;
         
+        font-family: 'Work Sans';
         font-size: 7vmin;
-        font-weight: bold;
+        font-weight: 600;
         text-shadow: 4px 4px 2px rgba(0 0 0 / .2);
         text-align: center;
     }
