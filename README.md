@@ -2,6 +2,8 @@
 
 This simple calculate-app on Vue-3 and Vite
 
+***You can see it by link: [Vue.js-Calculator](https://steelwinds.github.io/vue-calculate/)***
+
 ### Build with
 
 - [**Vue-3**](https://v3.ru.vuejs.org/)
