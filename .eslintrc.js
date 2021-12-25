@@ -7,6 +7,7 @@ module.exports = {
         'plugin:vue/vue3-recommended',
     ],
     rules: {
+        'vue/no-async-in-computed-properties': 'off',
         'vue/multi-word-component-names': 'off',
         'vue/no-setup-props-destructure': 'off',
         'vue/html-indent': ['error', 4],

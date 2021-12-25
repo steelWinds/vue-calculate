@@ -2,6 +2,8 @@ import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import { minifyHtml, injectHtml } from 'vite-plugin-html';
 
+const productionBase = '/vue-calculate/';
+
 export default defineConfig(({ command }) => {
     const config = {
         plugins: [
@@ -9,12 +11,12 @@ export default defineConfig(({ command }) => {
             minifyHtml(),
             injectHtml({
                 data: {
-                    title: 'Vue-Calculate'
+                    title: 'VueJS-Calculate'
                 }
             })
         ],
 
-        base: command === 'serve' ? '/' : 'no_repo'
+        base: command === 'serve' ? '/' : productionBase
     };
 
     return config;
